@@ -170,11 +170,11 @@
       <h1>Mini Minecraft Web — Versión Táctil</h1>
       <p><b>Movimiento:</b> joystick (izquierda).</p>
       <p><b>Mirá:</b> arrastrá en la mitad derecha.</p>
-      <p><b>Saltar:</b> botón <b>J</b>.</p>
+      <p><b>Saltar:</b> botón <b>⬆️</b>.</p>
       <p><b>Colocar:</b> botón <b>+</b> y luego tocá pantalla.</p>
       <p><b>Eliminar:</b> botón <b>–</b> y luego tocá el bloque.</p>
       <p><b>Tipo:</b> slots <b>1..5</b> abajo (5 = TNT).</p>
-      <p><b>Detonar TNT:</b> botón <b>E</b> (en orden de colocación).</p>
+      <p><b>Detonar TNT:</b> botón <b>💥</b> (en orden de colocación).</p>
       <button id="playBtn">TOCAR PARA JUGAR</button>
       <p style="margin-top:10px; font-size:12px; opacity:0.8;">Audio requiere un toque para habilitarse.</p>
     </div>
@@ -189,19 +189,19 @@
   </div>
 
   <div id="ui">
-    <div class="slot active" id="slot1" style="background:#4caf50;">1</div>
-    <div class="slot" id="slot2" style="background:#795548;">2</div>
-    <div class="slot" id="slot3" style="background:#607d8b;">3</div>
-    <div class="slot" id="slot4" style="background:#f44336;">4</div>
-    <div class="slot" id="slot5" style="background:#d32f2f;">5</div>
+    <div class="slot active" id="slot1" style="background:#4caf50;"></div>
+    <div class="slot" id="slot2" style="background:#795548;"></div>
+    <div class="slot" id="slot3" style="background:#607d8b;"></div>
+    <div class="slot" id="slot4" style="background:#f44336;"></div>
+    <div class="slot" id="slot5" style="background:#d32f2f;"></div>
   </div>
 
   <!-- 4 botones iguales y bien distribuidos -->
   <div id="actions">
     <div class="btn on" id="modePlace" title="Colocar">+</div>
-    <div class="btn" id="modeRemove" title="Eliminar">–</div>
-    <div class="btn" id="detonateBtn" title="Detonar TNT">E</div>
-    <div class="btn" id="jumpBtn" title="Saltar">J</div>
+    <div class="btn" id="modeRemove" title="Eliminar">-</div>
+    <div class="btn" id="detonateBtn" title="Detonar TNT">💥</div>
+    <div class="btn" id="jumpBtn" title="Saltar">⬆️</div>
   </div>
 
   <script type="module">
@@ -396,6 +396,21 @@
         ctx.strokeStyle='rgba(0,0,0,0.30)'; ctx.strokeRect(0,0,s,s);
       }),
     };
+
+    // === aplicar texturas de bloques a los botones 1..5 ===
+    [1,2,3,4,5].forEach(id => {
+      const slot = document.getElementById('slot' + id);
+      if (!slot) return;
+
+      const tex = textures[id];
+      if (!tex || !tex.image) return;
+
+      // usar el canvas de la textura como background del botón
+      slot.style.backgroundImage = `url(${tex.image.toDataURL()})`;
+      slot.style.backgroundSize = 'cover';
+      slot.style.backgroundPosition = 'center';
+    });
+
 
     function materialForBlockId(id){
       const tex = textures[id] || textures[1];
@@ -676,7 +691,7 @@
       const cx=dx*k, cy=dy*k;
       knobEl.style.transform = `translate(calc(-50% + ${cx}px), calc(-50% + ${cy}px))`;
       joyVec.x = cx/R;
-      joyVec.y = cy/R;
+      joyVec.y = -cy/R;
     }
     function resetKnob(){
       knobEl.style.transform = `translate(-50%, -50%)`;
